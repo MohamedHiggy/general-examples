@@ -1,4 +1,5 @@
 export default {
+  ssr: false,
   head: {
     title: 'general-examples',
     htmlAttrs: {
@@ -15,8 +16,7 @@ export default {
     ]
   },
 
-  css: [
-  ],
+  css: ["~/assets/scss/main.scss"],
 
   plugins: [
   ],

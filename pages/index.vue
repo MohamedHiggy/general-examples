@@ -1,9 +1,9 @@
 <template>
-  <div class="h-full container mx-auto py-4">
-    <p class="text-center text-blueColor font-semibold capitalize text-5xl">
+  <div class="h-full px-4 pt-4 pb-10">
+    <p class="text-center text-blueColor font-semibold capitalize text-5xl mb-10">
       All examples
     </p>
-    <ul class="flex flex-row gap-4 flex-wrap mt-5">
+    <ul class="flex flex-row gap-4 flex-wrap">
       <li v-for="link in $router.options.routes" :key="link.name">
         <nuxt-link
           :to="link.path"

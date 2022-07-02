@@ -1,0 +1,16 @@
+.image-observer-fade-in {
+  animation-name: fadeIn;
+  animation-duration: 1.5s;
+  animation-timing-function: cubic-bezier(0, 0, 0.4, 1);
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

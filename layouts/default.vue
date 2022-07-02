@@ -1,7 +1,7 @@
 <template>
   <div class="md:grid md:grid-cols-7">
     <!--sidebar-->
-    <div v-if="isExapnded" class="md:col-span-1">
+    <div v-if="isExapnded" class="lg:col-span-1 md:col-span-2">
       <TheSideBar :isExapnded="isExapnded" @expand="isExapnded = !isExapnded" />
     </div>
     <button
@@ -29,7 +29,7 @@
 
     <!--content-->
     <main
-      :class="[isExapnded ? 'md:col-span-6' : 'md:col-span-7']"
+      :class="[isExapnded ? 'lg:col-span-6 md:col-span-5' : 'md:col-span-7']"
       class="bg-gray-100 min-h-screen"
     >
       <Nuxt />

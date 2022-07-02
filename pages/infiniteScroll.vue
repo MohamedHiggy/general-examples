@@ -9,14 +9,25 @@
     <div class="flex flex-col">
       <div
         class="w-full rounded-lg overflow-hidden bg-white shadow-lg mb-4"
-        v-for="post in posts"
-        :key="post.id"
+        v-for="user in users"
+        :key="user.id"
       >
-        <div class="px-6 py-4">
-          <div class="font-bold text-gray-900 text-xl mb-2 truncate">
-            {{ post.title }}
+        <div class="px-6 py-4 flex items-center justify-start gap-2">
+          <div class="h-16 w-16 rounded-full overflow-hidden">
+            <img
+              id="userAvatar"
+              :data-src="user.avatar"
+              src="image.png"
+              alt="avatar of user"
+              class="w-full h-full object-cover"
+            />
           </div>
-          <p class="text-gray-500 text-base truncate">{{ post.body }}</p>
+          <div class="flex flex-col">
+            <p class="font-bold text-gray-700 text-lg">
+              {{ user.first_name + " " + user.last_name }}
+            </p>
+            <p class="text-gray-500 text-base">{{ user.email }}</p>
+          </div>
         </div>
       </div>
       <div v-if="isLoading" class="py-4 text-center">
@@ -50,22 +61,24 @@
 </template>
 
 <script>
+import { destriyImageObserver, imageObserver } from '~/utils/imageObserver'
 export default {
   name: "infiniteScrollPage",
   data() {
     return {
       isBottom: false,
       currentPage: 1,
-      posts: [],
+      users: [],
       isLoading: false,
+      getData: true,
     };
   },
   watch: {
     isBottom(newValue) {
-      if (newValue) {
-        this.getPosts();
+      if (newValue && this.getData) {
+        this.getUsers();
       }
-    }
+    },
   },
   created() {
     if (process.client) {
@@ -73,7 +86,10 @@ export default {
         this.isBottom = this.isBottomVisible();
       });
     }
-    this.getPosts();
+    this.getUsers();
+  },
+  beforeDestroy() {
+    destriyImageObserver();
   },
   methods: {
     isBottomVisible() {
@@ -83,16 +99,25 @@ export default {
       const bottomOfPage = visible + scrollY >= pageHeight;
       return bottomOfPage || pageHeight < visible;
     },
-    async getPosts() {
+    async getUsers() {
       this.isLoading = true;
       await this.$axios
         .$get(
-          `https://jsonplaceholder.typicode.com/posts?_page=${this.currentPage}`
+          `https://reqres.in/api/users?page=${this.currentPage}&per_page=10`
         )
         .then((res) => {
           this.isLoading = false;
-          this.posts = [...this.posts, ...res];
-          this.currentPage++;
+          this.users = [...this.users, ...res.data];
+          if (this.currentPage < res.total_pages) {
+            this.currentPage++;
+            this.getData = true;
+          } else {
+            this.getData = false;
+          }
+          setTimeout(() => {
+            const images = document.querySelectorAll("#userAvatar");
+            imageObserver(images);
+          }, 50);
         });
     },
   },
