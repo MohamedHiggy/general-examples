@@ -3,7 +3,7 @@ export function imageObserver(imagesArr) {
   const options = {
     root: null,
     rootMargin: "30px 0px",
-    threshold: 1.0,
+    threshold: 1.0, //don't show image until every pixel is visible.
   }
 
   const loadImage = (image) => {
@@ -22,14 +22,16 @@ export function imageObserver(imagesArr) {
 
   // Check if the IntersectionObserver is supported or not
   if ("IntersectionObserver" in window) {
+    // LazyLoad images using IntersectionObserver
     const observer = new IntersectionObserver(handler, options);
     targetObserver = observer;
     imagesArr.forEach((img) => observer.observe(img));
   } else {
-    console.log("Intersection Observers not supported");
+    // Load all images at once
     imagesArr.forEach((image) => loadImage(image));
   }
 }
-export function destriyImageObserver() {
+
+export function disconnectImageObserver() {
   targetObserver.disconnect();
 }

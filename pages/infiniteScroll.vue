@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import { destriyImageObserver, imageObserver } from '~/utils/imageObserver'
+import { disconnectImageObserver, imageObserver } from '~/utils/imageObserver'
 export default {
   name: "infiniteScrollPage",
   data() {
@@ -81,15 +81,13 @@ export default {
     },
   },
   created() {
-    if (process.client) {
-      window.addEventListener("scroll", (e) => {
-        this.isBottom = this.isBottomVisible();
-      });
-    }
+    window.addEventListener("scroll", (e) => {
+      this.isBottom = this.isBottomVisible();
+    });
     this.getUsers();
   },
   beforeDestroy() {
-    destriyImageObserver();
+    disconnectImageObserver();
   },
   methods: {
     isBottomVisible() {
