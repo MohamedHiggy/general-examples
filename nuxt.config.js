@@ -19,6 +19,7 @@ export default {
   css: ["~/assets/scss/main.scss"],
 
   plugins: [
+    "~/plugins/v-calendar.js"
   ],
 
   components: [
