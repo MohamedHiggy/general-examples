@@ -161,12 +161,44 @@ export default {
   watch: {
     filterItems(e) {
       this.$emit("filterItems", e);
+      this.updateURL();
     },
   },
   created() {
     this.$emit("filterItems", this.filterItems);
+    this.checkRouter();
   },
   methods: {
+    checkRouter() {
+      let searchParams = new URLSearchParams(window.location.search);
+
+      let search = searchParams.get("search");
+      if (search) this.search = searchParams.get("search");
+
+      let minPrice = searchParams.get("minPrice");
+      if (minPrice) this.minPrice = searchParams.get("minPrice");
+
+      let maxPrice = searchParams.get("maxPrice");
+      if (maxPrice) this.maxPrice = searchParams.get("maxPrice");
+
+      let selectedDate = searchParams.get("date");
+      if (selectedDate) this.selectedDate = searchParams.get("date");
+
+      let places = searchParams.get("places");
+      if (places) this.places = places.split(",");
+    },
+
+    updateURL() {
+      const payload = {};
+      if (this.search !== "") payload.search = this.search;
+      if (this.selectedDate !== "")
+        payload.date = new Date(this.selectedDate).toISOString().slice(0, 10);
+      if (this.minPrice > 0) payload.minPrice = this.minPrice;
+      if (this.maxPrice < 1000000) payload.maxPrice = this.maxPrice;
+      if (this.places.length) payload.places = this.places;
+      this.$router.push({ path: this.$route.path, query: payload });
+      console.log(payload);
+    },
     // filter companies by Name
     filterSearch(items) {
       return items.filter((item) => {
