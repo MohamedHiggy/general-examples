@@ -1,5 +1,10 @@
 <template>
   <div class="flex flex-col gap-3 sticky top-14">
+    <Dropdown
+      :items="countries"
+      :is-item="selectedItem"
+      @selectItem="selectedItem = $event"
+    />
     <input
       type="text"
       name="search"
@@ -149,6 +154,7 @@ export default {
       selectedDate: "",
       minPrice: 0,
       maxPrice: 1000000,
+      selectedItem: "Germany",
     };
   },
   computed: {
@@ -171,23 +177,17 @@ export default {
   methods: {
     checkRouter() {
       let searchParams = new URLSearchParams(window.location.search);
-
       let search = searchParams.get("search");
       if (search) this.search = searchParams.get("search");
-
       let minPrice = searchParams.get("minPrice");
       if (minPrice) this.minPrice = searchParams.get("minPrice");
-
       let maxPrice = searchParams.get("maxPrice");
       if (maxPrice) this.maxPrice = searchParams.get("maxPrice");
-
       let selectedDate = searchParams.get("date");
       if (selectedDate) this.selectedDate = searchParams.get("date");
-
       let places = searchParams.get("places");
       if (places) this.places = places.split(",");
     },
-
     updateURL() {
       const payload = {};
       if (this.search !== "") payload.search = this.search;
@@ -197,7 +197,6 @@ export default {
       if (this.maxPrice < 1000000) payload.maxPrice = this.maxPrice;
       if (this.places.length) payload.places = this.places;
       this.$router.push({ path: this.$route.path, query: payload });
-      console.log(payload);
     },
     // filter companies by Name
     filterSearch(items) {
